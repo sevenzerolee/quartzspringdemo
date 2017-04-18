@@ -35,8 +35,8 @@
 	</bean>
 	
 	<!--   每隔五秒执行一次  -->
-	<bean id="taskJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="name" value="jobTrigger1" />
+	<bean id="helloJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="name" value="helloJobTrigger1" />
 		<property name="group" value="triggerGroup1" />
 		<property name="jobDetail" ref="helloJobDetail" />
 		<property name="cronExpression">
@@ -45,11 +45,44 @@
 	</bean>
 	<!-- HelloJob End -->
 	
+	
+	<!-- WorldJob Start -->
+	<bean id="worldJob" class="org.sevenzero.quartz.quartzspringdemo.job.WorldJob">
+	</bean>
+	
+	<bean id="worldJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="name" value="worldJob1" />
+		<property name="group" value="jobGroup1" />
+		<property name="targetObject">
+			<ref bean="worldJob" />
+		</property>
+		<property name="targetMethod">
+			<value>execute</value>
+		</property>
+		<!--控制只有前次任务结束,下一次任务才能开始 -->
+		<property name="concurrent">
+			<value>false</value>
+		</property>
+	</bean>
+	
+	<!--   每隔五秒执行一次  -->
+	<bean id="worldJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="name" value="worldJobTrigger1" />
+		<property name="group" value="triggerGroup1" />
+		<property name="jobDetail" ref="worldJobDetail" />
+		<property name="cronExpression">
+ 			<value>0/5 * * * * ?</value>
+		</property>
+	</bean>
+	<!-- WorldJob End -->
+	
+	<!-- 总管理 -->
 	<bean id="jobSchedule" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">
 		<property name="schedulerName" value="jobSchedule" />
 		<property name="triggers">
 			<list>
-				<ref bean="taskJobTrigger" />
+				<ref bean="helloJobTrigger" />
+				<ref bean="worldJobTrigger" />
 			</list>
 		</property>	
 	</bean>
