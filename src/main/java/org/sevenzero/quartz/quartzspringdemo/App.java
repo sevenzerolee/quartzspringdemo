@@ -15,11 +15,10 @@ public class App {
 		
 		System.out.println("Hello World!");
 		
-		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-		
-		Scheduler scheduler = context.getBean("jobSchedule", Scheduler.class);
-		
 		try {
+			ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+//			Scheduler scheduler = context.getBean("jobSchedule", Scheduler.class);
+			Scheduler scheduler = context.getBean("quartzScheduler", Scheduler.class);
 			scheduler.start();
 		} 
 		catch (SchedulerException e) {

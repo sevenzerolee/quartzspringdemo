@@ -20,7 +20,7 @@
 	<bean id="helloJob" class="org.sevenzero.quartz.quartzspringdemo.job.HelloJob">
 	</bean>
 	
-	<bean id="helloJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+<!--  	<bean id="helloJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="name" value="helloJob1" />
 		<property name="group" value="jobGroup1" />
 		<property name="targetObject">
@@ -31,6 +31,18 @@
 		</property>
 		<property name="concurrent">
 			<value>false</value>
+		</property>
+	</bean>  -->
+	
+ 	<bean id="helloJobDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
+	    <property name="jobClass">
+	        <value>org.sevenzero.quartz.quartzspringdemo.MyDetailQuartzJobBean</value>
+	    </property>
+	    
+		<property name="jobDataAsMap">
+		    <map>
+		        <entry key="helloJob"  value-ref="helloJob"></entry>
+		    </map>
 		</property>
 	</bean>
 	
@@ -77,6 +89,9 @@
 	<!-- WorldJob End -->
 	
 	<!-- 总管理 -->
+	<!-- 如果lazy-init='false'那么容器启动就会执行调度程序 -->
+	<!-- 如果lazy-init='true',则需要实例化该bean才能执行调度程序 -->
+	<!-- 
 	<bean id="jobSchedule" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">
 		<property name="schedulerName" value="jobSchedule" />
 		<property name="triggers">
@@ -85,6 +100,27 @@
 				<ref bean="worldJobTrigger" />
 			</list>
 		</property>	
+	</bean>
+	 -->
+	
+	<!-- 配置调度任务 -->
+	<bean name="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">
+		
+		<!-- 配置文件 -->
+		<property name="configLocation" value="classpath:quartz.properties"/>
+
+        <!-- 每台集群机器部署应用的时候会更新触发器-->
+        <property name="overwriteExistingJobs" value="true"/>
+        
+        <property name="applicationContextSchedulerContextKey" value="applicationContextKey" />
+        <property name="autoStartup" value="true" />
+        
+        <property name="triggers">
+			<list>
+				<ref bean="helloJobTrigger" />
+			</list>
+		</property>	
+        
 	</bean>
 	 
 </beans>
