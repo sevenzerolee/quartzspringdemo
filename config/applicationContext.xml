@@ -109,10 +109,14 @@
 		<!-- 配置文件 -->
 		<property name="configLocation" value="classpath:quartz.properties"/>
 
+		<!-- QuartzScheduler 延时启动，应用启动完后 QuartzScheduler 再启动 -->
+		<property name="startupDelay" value="3" />
+		
         <!-- 每台集群机器部署应用的时候会更新触发器-->
         <property name="overwriteExistingJobs" value="true"/>
         
-        <property name="applicationContextSchedulerContextKey" value="applicationContextKey" />
+       <!--  <property name="applicationContextSchedulerContextKey" value="applicationContextKey" /> -->
+        
         <property name="autoStartup" value="true" />
         
         <property name="triggers">
