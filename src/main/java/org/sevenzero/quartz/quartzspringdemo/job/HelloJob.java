@@ -5,7 +5,7 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
-public class HelloJob implements Serializable {
+public class HelloJob {
 	
 	/**
 	 * 
