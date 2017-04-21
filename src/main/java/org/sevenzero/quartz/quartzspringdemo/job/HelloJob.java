@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
-import org.quartz.JobExecutionException;
 
 public class HelloJob implements Serializable {
 	
@@ -15,10 +14,16 @@ public class HelloJob implements Serializable {
 	
 	private static final Logger log = Logger.getLogger(HelloJob.class.getSimpleName());
 
-	public void exec()
-			throws JobExecutionException {
+	public void exec() {
 		
 		log.info("###### Hello,  " + new Date() );
+		
+		try {
+			Thread.sleep(8000L);
+		} 
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 	}
 

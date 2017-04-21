@@ -20,7 +20,7 @@
 	<bean id="helloJob" class="org.sevenzero.quartz.quartzspringdemo.job.HelloJob">
 	</bean>
 	
-<!--  	<bean id="helloJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+  	<!-- <bean id="helloJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="name" value="helloJob1" />
 		<property name="group" value="jobGroup1" />
 		<property name="targetObject">
@@ -32,7 +32,7 @@
 		<property name="concurrent">
 			<value>false</value>
 		</property>
-	</bean>  -->
+	</bean> -->
 	
  	<bean id="helloJobDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
 	    <property name="jobClass">
@@ -41,7 +41,10 @@
 	    
 		<property name="jobDataAsMap">
 		    <map>
-		        <entry key="helloJob"  value-ref="helloJob"></entry>
+		        <!-- <entry key="helloJob"  value-ref="helloJob"></entry> -->
+		        <entry key="targetObject" value="helloJob" />
+		        <entry key="targetMethod" value="exec" />
+		        
 		    </map>
 		</property>
 	</bean>
@@ -59,7 +62,7 @@
 	
 	
 	<!-- WorldJob Start -->
-	<bean id="worldJob" class="org.sevenzero.quartz.quartzspringdemo.job.WorldJob">
+	<!-- <bean id="worldJob" class="org.sevenzero.quartz.quartzspringdemo.job.WorldJob">
 	</bean>
 	
 	<bean id="worldJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -71,13 +74,11 @@
 		<property name="targetMethod">
 			<value>execute</value>
 		</property>
-		<!--控制只有前次任务结束,下一次任务才能开始 -->
 		<property name="concurrent">
 			<value>false</value>
 		</property>
 	</bean>
 	
-	<!--   每隔五秒执行一次  -->
 	<bean id="worldJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="name" value="worldJobTrigger1" />
 		<property name="group" value="triggerGroup1" />
@@ -85,7 +86,7 @@
 		<property name="cronExpression">
  			<value>0/5 * * * * ?</value>
 		</property>
-	</bean>
+	</bean> -->
 	<!-- WorldJob End -->
 	
 	<!-- 总管理 -->
@@ -106,6 +107,8 @@
 	<!-- 配置调度任务 -->
 	<bean name="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">
 		
+       <property name="applicationContextSchedulerContextKey" value="applicationContext" />
+       
 		<!-- 配置文件 -->
 		<property name="configLocation" value="classpath:quartz.properties"/>
 
@@ -114,8 +117,6 @@
 		
         <!-- 每台集群机器部署应用的时候会更新触发器-->
         <property name="overwriteExistingJobs" value="true"/>
-        
-       <!--  <property name="applicationContextSchedulerContextKey" value="applicationContextKey" /> -->
         
         <property name="autoStartup" value="true" />
         
